@@ -1,642 +1,125 @@
-<!DOCTYPE html>
-<html lang="zxx" class="no-js">
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;ja&quot;,&quot;en&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>个人主页 - 个人主页</title><meta name="description" content="xxxxx"><meta name="author" content="Shubin Sun"><meta name="copyright" content="Shubin Sun"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sunshubin.github.io/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="website"><meta property="og:title" content="个人主页"><meta property="og:url" content="https://sunshubin.github.io/"><meta property="og:site_name" content="个人主页"><meta property="og:description" content="xxxxx"><meta property="og:image" content="https://sunshubin.github.io/img/avatar.png"><meta property="article:published_time" content="2020-07-28T06:12:28.708Z"><meta property="article:modified_time" content="2020-07-28T06:12:28.708Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-	<!-- Mobile Specific Meta -->
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<!-- Favicon-->
-	<link rel="shortcut icon" href="img/fav.png">
-	<!-- Author Meta -->
-	<meta name="author" content="colorlib">
-	<!-- Meta Description -->
-	<meta name="description" content="">
-	<!-- Meta Keyword -->
-	<meta name="keywords" content="">
-	<!-- meta character set -->
-	<meta charset="UTF-8">
-	<!-- Site Title -->
-	<title>Sun Shubin</title>
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
-	<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700,900" rel="stylesheet">
-	<!--
-			CSS
-			============================================= -->
-	<link rel="stylesheet" href="css/linearicons.css">
-	<link rel="stylesheet" href="css/font-awesome.min.css">
-	<link rel="stylesheet" href="css/bootstrap.css">
-	<link rel="stylesheet" href="css/magnific-popup.css">
-	<link rel="stylesheet" href="css/nice-select.css">
-	<link rel="stylesheet" href="css/animate.min.css">
-	<link rel="stylesheet" href="css/owl.carousel.css">
-	<link rel="stylesheet" href="css/main.css">
-</head>
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-<body>
-
-	<!-- Start Preloader Area -->
-	<div class="preloader-area">
-		<div class="loader-box">
-			<div class="loader"></div>
-		</div>
-	</div>
-	<!-- End Preloader Area -->
-
-
-	<!-- Start Header Area -->
-	<header id="header">
-		<div class="country text-right"> 
-			<img src="img/country/china.jpg" alt="flag">中文简体
-			<img src="img/country/usa.jpg" alt="flag">English
-			<img src="img/country/japan.jpg" alt="flag">日本語
-		</div>
-		<div class="container main-menu">
-			<div class="row align-items-center d-flex">
-				<div id="logo">
-					<a href="index.html"><img src="img/logo.png" alt="" title="" /></a>
-				</div>
-				<nav id="nav-menu-container">
-					<ul class="nav-menu">
-						<li class=""><a class="active" href="index.html">首页</a></li>
-						<li><a href="about.html">关于我</a></li>
-						<li><a href="portfolio.html">个人档案</a></li>
-						<li class="menu-has-children"><a href="#">知识分享</a>
-							<ul>
-								<li><a href="https://sb-talents.github.io/sb-english.html" target="_blank">English</a></li>
-								<li><a href="https://sb-talents.github.io/sb-japanese.html" target="_blank">Japanese</a></li>
-								<li><a href="https://sb-talents.github.io/sb-nhk-news.html" target="_blank">NHK News（Japanese）</a></li>
-								<li><a href="https://sb-talents.github.io/sb-bigdata.html" target="_blank">Big Data and IDSS</a></li>
-								<li><a href="https://sb-talents.github.io/sb-labor-dispute.html" target="_blank">Labor law and disputes</a></li>
-							</ul>
-						</li>
-						<li class="menu-has-children"><a href="#">学习随笔</a>
-							<ul>
-								<li><a href="https://sunshubin.github.io/sb-blog.html/" target="_blank">Blog</a></li>
-								<li><a href="https://sunshubin.github.io/sb-notes.html/" target="_blank">Notes</a></li>
-							</ul>
-						</li>
-						<li><a href="contact.html">联系方式</a></li>
-					</ul>
-				</nav>
-			</div>
-		</div>
-	</header>
-	<!-- End Header Area -->
-
-
-	<!-- start banner Area -->
-	<section class="home-banner-area">
-		<div class="container">
-			<div class="row fullscreen d-flex align-items-center">
-				<div class="banner-content col-lg-6 col-md-12 justify-content-center ">
-					<div class="me wow fadeInDown" data-wow-duration="1s" data-wow-delay="1.2s">It's me</div>
-					<h1 class="wow fadeInUp" data-wow-duration="1s" data-wow-delay="1.7s">Sun Shubin</h1>
-					<div class="designation mb-50 wow fadeInUp" data-wow-duration="1s" data-wow-delay="2.1s">
-						Senior Creative
-						<span class="designer">Designer</span>
-						and Content
-						<span class="developer">Developer</span>
-					</div>
-					<a href="#" class="primary-btn" data-text="Hire Me">
-						<span>H</span>
-						<span>i</span>
-						<span>r</span>
-						<span>e</span>
-						<span> </span>
-						<span>M</span>
-						<span>e</span>
-					</a>
-				</div>
-				<div class="banner-img col-lg-6 col-md-6 align-self-end">
-					<img class="img-fluid" src="img/banner-img.png" alt="">
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End banner Area -->
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: false,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isSidebar: false,
+  postUpdate: '2020-07-28 14:12:28'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.1"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">1</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">2</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/IuWi8QbHvzjlOPw.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">个人主页</a></span><span class="pull-right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="site-info"><h1 id="site_title">个人主页</h1><div id="site_subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/xxxxx" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div id="scroll_down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout_page" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left_radius"><a href="/zh-CN/UiPath/%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/RPA/" title="RPA">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RPA"></a></div><div class="recent-post-info"><a class="article-title" href="/zh-CN/UiPath/%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/RPA/" title="RPA">RPA</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-07-26T10:13:50.000Z" title="发表于 2020-07-26 18:13:50">2020-07-26</time><span class="article-meta__separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-07-26T10:56:44.301Z" title="更新于 2020-07-26 18:56:44">2020-07-26</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/UiPath/">UiPath</a><i class="fas fa-angle-right"></i><a class="article-meta__categories" href="/categories/UiPath/%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/">基本介绍</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag article-meta__icon"></i><a class="article-meta__tags" href="/tags/%E7%AE%80%E4%BB%8B/">简介</a><span class="article-meta__link">•</span><a class="article-meta__tags" href="/tags/%E5%85%A5%E9%97%A8/">入门</a></span></div><div class="content">简介内容制作中
 
 
-	<!-- Start brands Area -->
-	<section class="brands-area">
-		<div class="container">
-			<div class="brand-wrap">
-				<div class="row align-items-center active-brand-carusel justify-content-start no-gutters">
-					<div class="col single-brand">
-						<a href="#"><img class="mx-auto" src="img/brand/b1.png" alt=""></a>
-					</div>
-					<div class="col single-brand">
-						<a href="#"><img class="mx-auto" src="img/brand/b2.png" alt=""></a>
-					</div>
-					<div class="col single-brand">
-						<a href="#"><img class="mx-auto" src="img/brand/b3.png" alt=""></a>
-					</div>
-					<div class="col single-brand">
-						<a href="#"><img class="mx-auto" src="img/brand/b4.png" alt=""></a>
-					</div>
-					<div class="col single-brand">
-						<a href="#"><img class="mx-auto" src="img/brand/b5.png" alt=""></a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End brands Area -->
+XXXX</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Shubin Sun</div><div class="author-info__description">xxxxx</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives"><div class="headline">文章</div><div class="length_num">1</div></a></div><div class="card-info-data-item is-center">      <a href="/tags"><div class="headline">标签</div><div class="length_num">2</div></a></div><div class="card-info-data-item is-center"><a href="/categories"><div class="headline">分类</div><div class="length_num">2</div></a></div></div><a class="button--animated" id="card-info-btn" href="https://github.com/xxxxxx" target="_blank" rel="noopener"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/xxxxx" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-recent-item"><div class="aside-recent-post"><a class="aside-post-cover" href="/zh-CN/UiPath/%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/RPA/" title="RPA"><img class="aside-post-bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RPA"/></a><div class="aside-post-info"><a class="aside-post-title" href="/zh-CN/UiPath/%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/RPA/" title="RPA">RPA</a><time class="aside-post_meta post-meta-date" datetime="2020-07-26T10:13:50.000Z" title="发表于 2020-07-26 18:13:50">2020-07-26</time></div></div></div></div></div><div class="card-widget card-categories"><div class="card-content"><div class="item-headline"><i class="fas fa-folder-open"></i><span>分类</span></div><ul class="card-category-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/UiPath/"><span class="card-category-list-name">UiPath</span><span class="card-category-list-count">1</span></a></li><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/UiPath/%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/"><span class="card-category-list-name">基本介绍</span><span class="card-category-list-count">1</span></a></li></ul>
+                       
+            </ul></div></div><div class="card-widget card-tags"><div class="card-content"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/%E5%85%A5%E9%97%A8/" style="font-size: 16px; color: #999">入门</a> <a href="/tags/%E7%AE%80%E4%BB%8B/" style="font-size: 16px; color: #999">简介</a></div></div></div><div class="card-widget card-archives"><div class="card-content"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/07/"><span class="card-archive-list-date">七月 2020</span><span class="card-archive-list-count">1</span></a></li></ul></div></div><div class="card-widget card-webinfo"><div class="card-content"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="webinfo-article-name">文章数目 :</div><div class="webinfo-article-count">1</div></div><div class="webinfo-item"><div class="webinfo-site-wordcount-name">本站总字数 :</div><div class="webinfo-site-wordcount">8</div></div><div class="webinfo-item">      <div class="webinfo-site-uv-name">本站访客数 :</div><div class="webinfo-site-uv-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="webinfo-site-name">本站总访问量 :</div><div class="webinfo-site-pv-count" id="busuanzi_value_site_pv"></div></div></div></div></div></div></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 By Shubin Sun</div><div class="framework-info"><span>框架 </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><div class="js-pjax"><script>function subtitleType () {
+  if (true) { 
+    var typed = new Typed("#subtitle", {
+      strings: "今日事&#44;今日畢,Never put off till tomorrow what you can do today".split(","),
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50
+    })
+  } else {
+    document.getElementById("subtitle").innerHTML = '今日事&#44;今日畢'
+  }
+}
 
-
-	<!-- Start About Area -->
-	<section class="about-area section-gap">
-		<div class="container">
-			<div class="row align-items-center justify-content-between">
-				<div class="col-lg-6 about-left">
-					<img class="img-fluid" src="img/about-img.jpg" alt="">
-				</div>
-				<div class="col-lg-5 col-md-12 about-right">
-					<div class="section-title">
-						<h2>about myselt</h2>
-					</div>
-					<div class="mb-50 wow fadeIn" data-wow-duration=".8s">
-						<p>
-							inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards especially in the
-							workplace. That’s why it’s crucial that, as women, our behavior on the job is beyond reproach. inappropriate behavior
-							is often laughed. inappropriate behavior is often laughed off as “boys will be boys,” women face higher.
-						</p>
-						<p>That’s why it’s crucial that, as women, our behavior on the job is beyond reproach. inappropriate behavior is often
-							laughed.
-						</p>
-					</div>
-					<a href="#" class="primary-btn white" data-text="More Info">
-						<span>M</span>
-						<span>o</span>
-						<span>r</span>
-						<span>e</span>
-						<span> </span>
-						<span>I</span>
-						<span>n</span>
-						<span>f</span>
-						<span>o</span>
-					</a>
-					<a href="#" class="primary-btn" data-text="Resume">
-						<span>R</span>
-						<span>e</span>
-						<span>s</span>
-						<span>u</span>
-						<span>m</span>
-						<span>e</span>
-					</a>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End About Area -->
-
-
-	<!-- Start Work Area Area -->
-	<section class="work-area section-gap-top section-gap-bottom-90" id="work">
-		<div class="container">
-			<div class="row d-flex justify-content-between align-items-end mb-80">
-				<div class="col-lg-6">
-					<div class="section-title">
-						<h2>Latest Works</h2>
-						<p>If you are looking at blank cassettes on the web, you may be very confused at the difference in price. You may see
-							some for as low as $.17 each.</p>
-					</div>
-				</div>
-
-				<div class="col-lg-6">
-					<div class="filters">
-						<ul>
-							<li class="active" data-filter=".all">All Categories</li>
-							<li data-filter=".branding">Branding</li>
-							<li data-filter=".creative">Creative Work</li>
-							<li data-filter=".web-design">Web Design</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-
-			<div class="filters-content">
-				<div class="row grid">
-					<div class="single-work col-lg-4 col-md-6 col-sm-12 all creative wow fadeInUp" data-wow-duration="2s">
-						<div class="relative">
-							<div class="thumb">
-								<div class="overlay overlay-bg"></div>
-								<img class="image img-fluid" src="img/work/w1.jpg" alt="">
-							</div>
-							<div class="middle">
-								<h4>2D Vinyl Design</h4>
-								<div class="cat">Client Project</div>
-							</div>
-							<a class="overlay" href="portfolio-details.html"></a>
-						</div>
-					</div>
-					<div class="single-work col-lg-4 col-md-6 col-sm-12 all web-design branding wow fadeInUp" data-wow-duration="2s" data-wow-delay="0.2s">
-						<div class="relative">
-							<div class="thumb">
-								<div class="overlay overlay-bg"></div>
-								<img class="image img-fluid" src="img/work/w2.jpg" alt="">
-							</div>
-							<div class="middle">
-								<h4>2D Vinyl Design</h4>
-								<div class="cat">Client Project</div>
-							</div>
-							<a class="overlay" href="portfolio-details.html"></a>
-						</div>
-					</div>
-					<div class="single-work col-lg-4 col-md-6 col-sm-12 all branding web-design wow fadeInUp" data-wow-duration="2s" data-wow-delay="0.4s">
-						<div class="relative">
-							<div class="thumb">
-								<div class="overlay overlay-bg"></div>
-								<img class="image img-fluid" src="img/work/w3.jpg" alt="">
-							</div>
-							<div class="middle">
-								<h4>2D Vinyl Design</h4>
-								<div class="cat">Client Project</div>
-							</div>
-							<a class="overlay" href="portfolio-details.html"></a>
-						</div>
-					</div>
-					<div class="single-work col-lg-4 col-md-6 col-sm-12 all web-design wow fadeInUp" data-wow-duration="2s" data-wow-delay="0.6s">
-						<div class="relative">
-							<div class="thumb">
-								<div class="overlay overlay-bg"></div>
-								<img class="image img-fluid" src="img/work/w6.jpg" alt="">
-							</div>
-							<div class="middle">
-								<h4>2D Vinyl Design</h4>
-								<div class="cat">Client Project</div>
-							</div>
-							<a class="overlay" href="portfolio-details.html"></a>
-						</div>
-					</div>
-					<div class="single-work col-lg-4 col-md-6 col-sm-12 all creative wow fadeInUp" data-wow-duration="2s">
-						<div class="relative">
-							<div class="thumb">
-								<div class="overlay overlay-bg"></div>
-								<img class="image img-fluid" src="img/work/w4.jpg" alt="">
-							</div>
-							<div class="middle">
-								<h4>2D Vinyl Design</h4>
-								<div class="cat">Client Project</div>
-							</div>
-							<a class="overlay" href="portfolio-details.html"></a>
-						</div>
-					</div>
-					<div class="single-work col-lg-4 col-md-6 col-sm-12 all branding wow fadeInUp" data-wow-duration="2s" data-wow-delay="0.2s">
-						<div class="relative">
-							<div class="thumb">
-								<div class="overlay overlay-bg"></div>
-								<img class="image img-fluid" src="img/work/w5.jpg" alt="">
-							</div>
-							<div class="middle">
-								<h4>2D Vinyl Design</h4>
-								<div class="cat">Client Project</div>
-							</div>
-							<a class="overlay" href="portfolio-details.html"></a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End Work Area Area -->
-
-
-	<!-- Start Job History Area Area -->
-	<section class="job-area section-gap-top section-gap-bottom-90">
-		<div class="container">
-			<div class="row d-flex">
-				<div class="col-lg-12">
-					<div class="section-title">
-						<h2>Job History</h2>
-						<p>If you are looking at blank cassettes on the web, you may be very confused at the difference in price. You may see
-							some for as low as $.17 each.</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-lg-6">
-					<div class="single-job">
-						<div class="top-sec d-flex justify-content-between">
-							<div class="top-left">
-								<h4>Senior Creative Design</h4>
-								<p>Old Bird IT, New Yorkt</p>
-							</div>
-							<div class="top-right">
-								<a href="#" class="primary-btn" data-text="Jul '15 to Present">
-									<span>J</span><span>u</span><span>l</span>
-									<span>'</span><span>1</span><span>5</span>
-									<span>t</span><span>o</span>
-									<span>P</span><span>r</span><span>e</span><span>s</span><span>e</span><span>n</span><span>t</span>
-								</a>
-							</div>
-						</div>
-						<div class="bottom-sec wow fadeIn" data-wow-duration="2s">
-							All users on MySpace will know that there are millions of people out there. Every day besides. All users on My will know
-							that there are millions of people out of the field there.
-						</div>
-					</div>
-				</div>
-
-				<div class="col-lg-6">
-					<div class="single-job">
-						<div class="top-sec d-flex justify-content-between">
-							<div class="top-left">
-								<h4>Senior Visualiser</h4>
-								<p>Old Bird IT, New Yorkt</p>
-							</div>
-							<div class="top-right">
-								<a href="#" class="primary-btn" data-text="Jul '15 to Present">
-									<span>J</span><span>u</span><span>l</span>
-									<span>'</span><span>1</span><span>5</span>
-									<span>t</span><span>o</span>
-									<span>P</span><span>r</span><span>e</span><span>s</span><span>e</span><span>n</span><span>t</span>
-								</a>
-							</div>
-						</div>
-						<div class="bottom-sec wow fadeIn" data-wow-duration="2s" data-wow-delay="0.2s">
-							All users on MySpace will know that there are millions of people out there. Every day besides. All users on My will know
-							that there are millions of people out of the field there.
-						</div>
-					</div>
-				</div>
-
-				<div class="col-lg-6">
-					<div class="single-job">
-						<div class="top-sec d-flex justify-content-between">
-							<div class="top-left">
-								<h4>Junior Visualiser</h4>
-								<p>Old Bird IT, New Yorkt</p>
-							</div>
-							<div class="top-right">
-								<a href="#" class="primary-btn" data-text="Jul '15 to Present">
-									<span>J</span><span>u</span><span>l</span>
-									<span>'</span><span>1</span><span>5</span>
-									<span>t</span><span>o</span>
-									<span>P</span><span>r</span><span>e</span><span>s</span><span>e</span><span>n</span><span>t</span>
-								</a>
-							</div>
-						</div>
-						<div class="bottom-sec wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
-							All users on MySpace will know that there are millions of people out there. Every day besides. All users on My will know
-							that there are millions of people out of the field there.
-						</div>
-					</div>
-				</div>
-
-				<div class="col-lg-6">
-					<div class="single-job">
-						<div class="top-sec d-flex justify-content-between">
-							<div class="top-left">
-								<h4>Intern Designer</h4>
-								<p>Old Bird IT, New Yorkt</p>
-							</div>
-							<div class="top-right">
-								<a href="#" class="primary-btn" data-text="Jul '15 to Present">
-									<span>J</span><span>u</span><span>l</span>
-									<span>'</span><span>1</span><span>5</span>
-									<span>t</span><span>o</span>
-									<span>P</span><span>r</span><span>e</span><span>s</span><span>e</span><span>n</span><span>t</span>
-								</a>
-							</div>
-						</div>
-						<div class="bottom-sec wow fadeIn" data-wow-duration="2s" data-wow-delay="0.6s">
-							All users on MySpace will know that there are millions of people out there. Every day besides. All users on My will know
-							that there are millions of people out of the field there.
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End Job Historyt Area Area -->
-
-
-	<!-- Start Service Area -->
-	<section class="service-area section-gap">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="section-title">
-						<h2>Service Offers</h2>
-						<p>If you are looking at blank cassettes on the web, you may be very confused at the difference in price. You may see
-							some for as low as $.17 each.</p>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-3 col-md-6">
-					<div class="single-service wow fadeInUp" data-wow-duration="1s">
-						<span class="lnr lnr-screen"></span>
-						<h4>
-							<span>Web</span> Design
-						</h4>
-						<p>If you’re looking blank casvsettes on the web, you may confuse.</p>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s">
-						<span class="lnr lnr-laptop-phone"></span>
-						<h4><span>Application</span> Development
-						</h4>
-						<p>If you’re looking blank casvsettes on the web, you may confuse.</p>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.4s">
-						<span class="lnr lnr-database"></span>
-						<h4><span>Web</span> Development
-						</h4>
-						<p>If you’re looking blank casvsettes on the web, you may confuse.</p>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
-						<span class="lnr lnr-chart-bars"></span>
-						<h4><span>Web</span> Development
-						</h4>
-						<p>If you’re looking blank casvsettes on the web, you may confuse.</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End Service Area -->
-
-
-	<!-- Start Testimonials Area -->
-	<section class="testimonials_area section-gap">
-		<div class="container">
-			<div class="testi_slider owl-carousel">
-				<div class="item">
-					<div class="testi_item">
-						<img src="img/quote.png" alt="">
-						<h4>Fanny Spencer</h4>
-						<ul class="list">
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-						</ul>
-						<div class="wow fadeIn" data-wow-duration="1s">
-							<p>
-								As conscious traveling Paup ers we must always be oncerned about our dear Mother Earth. If you think about it, you travel
-								across her face <br> and She is the host to your journey.
-							</p>
-						</div>
-					</div>
-				</div>
-				<div class="item">
-					<div class="testi_item">
-						<img src="img/quote.png" alt="">
-						<h4>Fanny Spencer</h4>
-						<ul class="list">
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-						</ul>
-						<div class="wow fadeIn" data-wow-duration="1s">
-							<p>
-								As conscious traveling Paup ers we must always be oncerned about our dear Mother Earth. If you think about it, you travel
-								across her face <br> and She is the host to your journey.
-							</p>
-						</div>
-					</div>
-				</div>
-				<div class="item">
-					<div class="testi_item">
-						<img src="img/quote.png" alt="">
-						<h4>Fanny Spencer</h4>
-						<ul class="list">
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-							<li><a href="#"><i class="fa fa-star"></i></a></li>
-						</ul>
-						<div class="wow fadeIn" data-wow-duration="1s">
-							<p>
-								As conscious traveling Paup ers we must always be oncerned about our dear Mother Earth. If you think about it, you travel
-								across her face <br> and She is the host to your journey.
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End Testimonials Area -->
-
-
-	<!-- Start Contact Area -->
-	<section class="contact-area section-gap">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="contact-title">
-						<h2>Contact Me</h2>
-						<p>If you are looking at blank cassettes on the web, you may be very confused at the difference in price. You may see
-							some for as low as $.17 each.</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="row mt-80">
-				<div class="col-lg-4 col-md-4">
-					<div class="contact-box">
-						<h4>+44 2365 654 8962</h4>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4">
-					<div class="contact-box">
-						<h4>information@colorlib.com</h4>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4">
-					<div class="contact-box">
-						<h4>kenedyjackson.me</h4>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-lg-12 text-center">
-					<a href="#" class="primary-btn mt-50" data-text="Hire Me">
-						<span>H</span>
-						<span>i</span>
-						<span>r</span>
-						<span>e</span>
-						<span> </span>
-						<span>M</span>
-						<span>e</span>
-					</a>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End Contact Area -->
-
-
-	<!-- start footer Area -->
-	<footer class="footer-area">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-lg-12">
-					<div class="footer-top flex-column">
-						<div class="footer-logo">
-							<a href="#">
-								<img src="img/logo.png" alt="">
-							</a>
-							<h4>Follow Me</h4>
-						</div>
-						<div class="footer-social">
-							<a href="#"><i class="fa fa-facebook"></i></a>
-							<a href="#"><i class="fa fa-twitter"></i></a>
-							<a href="#"><i class="fa fa-dribbble"></i></a>
-							<a href="#"><i class="fa fa-behance"></i></a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row footer-bottom justify-content-center">
-				<p class="col-lg-8 col-sm-12 footer-text">
-					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://sunshubin.github.io" target="_blank">Sun Shubin</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-			</div>
-		</div>
-	</footer>
-	<!-- End footer Area -->
-
-	<!-- ####################### Start Scroll to Top Area ####################### -->
-	<div id="back-top">
-		<a title="Go to Top" href="#">
-			<i class="lnr lnr-arrow-up"></i>
-		</a>
-	</div>
-	<!-- ####################### End Scroll to Top Area ####################### -->
-
-	<script src="js/vendor/jquery-2.2.4.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-	 crossorigin="anonymous"></script>
-	<script src="js/vendor/bootstrap.min.js"></script>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
-	<script src="js/easing.min.js"></script>
-	<script src="js/hoverIntent.js"></script>
-	<script src="js/superfish.min.js"></script>
-	<script src="js/mn-accordion.js"></script>
-	<script src="js/jquery.ajaxchimp.min.js"></script>
-	<script src="js/jquery.magnific-popup.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/jquery.nice-select.min.js"></script>
-	<script src="js/isotope.pkgd.min.js"></script>
-	<script src="js/jquery.circlechart.js"></script>
-	<script src="js/mail-script.js"></script>
-	<script src="js/wow.min.js"></script>
-	<script src="js/main.js"></script>
-</body>
-
-</html>
+if (true) {
+  if (typeof Typed === 'function') subtitleType()
+  else $.getScript('https://cdn.jsdelivr.net/npm/typed.js/lib/typed.min.js', subtitleType)
+} else {
+  subtitleType()
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

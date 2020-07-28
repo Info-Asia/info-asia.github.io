@@ -1,491 +1,810 @@
-$(document).ready(function () {
-    "use strict";
+/**
+  * 當menu過多時，自動適配，避免UI錯亂
+  * @param {*} n
+  * 傳入 1 sidebar打開時
+  * 傳入 2 正常狀態下
+  */
 
-    var window_width = $(window).width(),
-        window_height = window.innerHeight,
-        header_height = $(".default-header").height(),
-        header_height_static = $(".site-header.static").outerHeight(),
-        fitscreen = window_height - header_height;
+const blogNameWidth = $('#blog_name').width()
+const menusWidth = $('.menus').width()
+const sidebarWidth = $('#sidebar').width()
 
-    $(".fullscreen").css("height", window_height)
-    $(".fitscreen").css("height", fitscreen);
+const adjustMenu = function (n) {
+  const $nav = $('#nav')
+  let t
+  if (n === 0) t = true
+  else if (n === 1) t = blogNameWidth + menusWidth > $nav.width() - sidebarWidth - 30
+  else t = blogNameWidth + menusWidth > $nav.width() - 30
 
-    //------- Wow JS Initialized --------// 
-    new WOW().init();
+  if (t) {
+    $nav.find('.toggle-menu').addClass('is-visible-inline')
+    $nav.find('.menus_items').addClass('is-invisible')
+    $nav.find('#search_button span').addClass('is-invisible')
+  } else {
+    $nav.find('.toggle-menu').removeClass('is-visible-inline')
+    $nav.find('.menus_items').removeClass('is-invisible')
+    $nav.find('#search_button span').removeClass('is-invisible')
+  }
+}
 
-    //------- Go to Top --------// 
-    $(window).on("scroll", function () {
-        if ($(this).scrollTop() > 100) {
-            $('#header1').addClass('header-scrolled1');
-            $('#back-top').addClass('back-top-animation');
+// 初始化header
+const initAdjust = () => {
+  if (window.innerWidth < 768) adjustMenu(0)
+  else adjustMenu(2)
+  $('#nav').css({ opacity: '1', animation: 'headerNoOpacity 1s' })
+}
+
+/**
+ * 進入post頁sidebar處理
+ */
+const OpenSidebarAuto = () => {
+  if (window.innerWidth > 1024 && $('#toggle-sidebar').hasClass('on')) {
+    setTimeout(function () {
+      openSidebar()
+    }, 400)
+  }
+}
+
+/**
+ * 點擊左下角箭頭,顯示sidebar
+ */
+
+const closeSidebar = () => {
+  $('#sidebar').removeClass('tocOpenPc').animate({
+    left: '-300px'
+  }, 400)
+  $('.menus').animate({
+    paddingRight: 0
+  }, 400)
+  $('#body-wrap').animate({
+    paddingLeft: 0
+  }, 400)
+  $('#toggle-sidebar').css({
+    transform: 'rotateZ(0deg)',
+    color: '#1F2D3D',
+    opacity: '1'
+  })
+  setTimeout(function () {
+    adjustMenu(2)
+  }, 400)
+}
+
+const openSidebar = () => {
+  adjustMenu(1)
+  $('#sidebar').addClass('tocOpenPc').animate({
+    left: 0
+  }, 400)
+  $('.menus').animate({
+    paddingRight: 300
+  }, 400)
+  $('#body-wrap').animate({
+    paddingLeft: 300
+  }, 400)
+  $('#toggle-sidebar').css({
+    transform: 'rotateZ(180deg)',
+    color: '#99a9bf',
+    opacity: '1'
+  })
+}
+
+const toggleSidebar = function () {
+  $('#toggle-sidebar').on('click', function () {
+    const isOpen = $(this).hasClass('on')
+    isOpen ? $(this).removeClass('on') : $(this).addClass('on')
+    if (isOpen) {
+      closeSidebar()
+    } else {
+      openSidebar()
+    }
+  })
+}
+
+/**
+ * 手機menu和toc按鈕點擊
+ * 顯示menu和toc的sidebar
+ */
+
+const sidebarFn = () => {
+  const $toggleMenu = $('.toggle-menu')
+  const $mobileSidebarMenus = $('#mobile-sidebar-menus')
+  const $mobileTocButton = $('#mobile-toc-button')
+  const $menuMask = $('#menu_mask')
+  const $body = $('body')
+  const $sidebar = $('#sidebar')
+
+  function openMobileSidebar (name) {
+    sidebarPaddingR()
+    $body.css('overflow', 'hidden')
+    $menuMask.fadeIn()
+
+    if (name === 'menu') {
+      $toggleMenu.removeClass('close').addClass('open')
+      $mobileSidebarMenus.addClass('open')
+    }
+
+    if (name === 'toc') {
+      $mobileTocButton.removeClass('close').addClass('open')
+      $sidebar.addClass('tocOpenMobile').css({ transform: 'translate3d(-100%,0,0)', left: '' })
+    }
+  }
+
+  function closeMobileSidebar (name) {
+    $body.css({ overflow: '', 'padding-right': '' })
+    $menuMask.fadeOut()
+
+    if (name === 'menu') {
+      $toggleMenu.removeClass('open').addClass('close')
+      $mobileSidebarMenus.removeClass('open')
+    }
+
+    if (name === 'toc') {
+      $mobileTocButton.removeClass('open').addClass('close')
+      $sidebar.removeClass('tocOpenMobile').css({ transform: '' })
+    }
+  }
+
+  $toggleMenu.on('click', function () {
+    openMobileSidebar('menu')
+  })
+
+  $mobileTocButton.on('click', function () {
+    openMobileSidebar('toc')
+  })
+
+  $menuMask.on('click touchstart', function (e) {
+    if ($toggleMenu.hasClass('open')) {
+      closeMobileSidebar('menu')
+    }
+    if ($mobileTocButton.hasClass('open')) {
+      closeMobileSidebar('toc')
+    }
+  })
+
+  $(window).on('resize', function (e) {
+    if (!$toggleMenu.is(':visible')) {
+      if ($toggleMenu.hasClass('open')) closeMobileSidebar('menu')
+    }
+  })
+
+  const mql = window.matchMedia('(max-width: 1024px)')
+  mql.addListener(function (ev) {
+    if (ev.matches) {
+      if ($sidebar.hasClass('tocOpenPc')) closeSidebar()
+    } else {
+      if ($('#toggle-sidebar').hasClass('on')) openSidebar()
+      if ($mobileTocButton.hasClass('open')) closeMobileSidebar('toc')
+    }
+  })
+
+  // toc元素點擊
+  $sidebar.find('.toc-link').on('click', function (e) {
+    if (window.innerWidth <= 1024) {
+      closeMobileSidebar('toc')
+    } else {
+      e.preventDefault()
+      scrollToDest($(this).attr('href'))
+    }
+  })
+}
+
+/**
+ * 首頁top_img底下的箭頭
+ */
+const scrollDownInIndex = () => {
+  $('#scroll_down').on('click', function () {
+    scrollToDest('#content-inner')
+  })
+}
+
+/**
+ * 代碼
+ * 只適用於Hexo默認的代碼渲染
+ */
+const addHighlightTool = function () {
+  const $figureHighlight = $('figure.highlight')
+  const isHighlightCopy = GLOBAL_CONFIG.highlightCopy
+  const isHighlightLang = GLOBAL_CONFIG.highlightLang
+  const isHighlightShrink = GLOBAL_CONFIG_SITE.isHighlightShrink
+
+  if ($figureHighlight.length && (isHighlightCopy || isHighlightLang || isHighlightShrink !== undefined)) {
+    let highlightShrinkEle = ''
+    let highlightCopyEle = ''
+    const highlightShrinkClass = isHighlightShrink === true ? 'closed' : ''
+
+    if (isHighlightShrink !== undefined) {
+      highlightShrinkEle = `<i class="fas fa-angle-down expand ${highlightShrinkClass}"></i>`
+    }
+
+    if (isHighlightCopy) {
+      highlightCopyEle = '<div class="copy-notice"></div><i class="fas fa-paste copy-button"></i>'
+    }
+
+    if (isHighlightLang) {
+      let langName
+      $figureHighlight.each(function () {
+        const $this = $(this)
+        langName = $this.attr('class').split(' ')[1]
+        if (langName === 'plain' || langName === undefined) langName = 'Code'
+        const highlightLangEle = `<div class="code-lang">${langName}</div>`
+        $this.prepend(`<div class="highlight-tools ${highlightShrinkClass}">${highlightShrinkEle + highlightLangEle + highlightCopyEle}</div>`)
+      })
+    } else {
+      $figureHighlight.prepend(`<div class="highlight-tools ${highlightShrinkClass}">${highlightShrinkEle + highlightCopyEle}</div>`)
+    }
+
+    /**
+     * 代碼收縮
+     */
+
+    if (isHighlightShrink !== undefined) {
+      $figureHighlight.find('.highlight-tools >.expand').on('click', function () {
+        const $this = $(this)
+        const $table = $this.parent().nextAll()
+        $this.toggleClass('closed')
+        $table.is(':visible') ? $table.css('display', 'none') : $table.css('display', 'block')
+      })
+    }
+
+    /**
+     * 代碼copy
+     */
+    if (isHighlightCopy) {
+      const copy = function (text, ctx) {
+        if (document.queryCommandSupported && document.queryCommandSupported('copy')) {
+          document.execCommand('copy')
+          if (GLOBAL_CONFIG.Snackbar !== undefined) {
+            snackbarShow(GLOBAL_CONFIG.copy.success)
+          } else {
+            $(ctx).prev('.copy-notice')
+              .text(GLOBAL_CONFIG.copy.success)
+              .animate({
+                opacity: 1
+              }, 450, function () {
+                setTimeout(function () {
+                  $(ctx).prev('.copy-notice').animate({
+                    opacity: 0
+                  }, 650)
+                }, 400)
+              })
+          }
         } else {
-            $('#header1').removeClass('header-scrolled1');
-            $('#back-top').removeClass('back-top-animation');
+          if (GLOBAL_CONFIG.Snackbar !== undefined) {
+            snackbarShow(GLOBAL_CONFIG.copy.noSupport)
+          } else {
+            $(ctx).prev('.copy-notice').text(GLOBAL_CONFIG.copy.noSupport)
+          }
         }
-    });
+      }
 
-    /* ---------------------------------------------
-        scroll body to 0px on click
-     --------------------------------------------- */
-     $('#back-top a').on("click", function () {
-        $('body,html').animate({
-            scrollTop: 0
-        }, 1000);
-        return false;
-    });
+      // click events
+      $figureHighlight.find('.highlight-tools >.copy-button').on('click', function () {
+        const $buttonParent = $(this).parents('figure.highlight')
+        $buttonParent.addClass('copy-true')
+        const selection = window.getSelection()
+        const range = document.createRange()
+        range.selectNodeContents($buttonParent.find('table .code pre')[0])
+        selection.removeAllRanges()
+        selection.addRange(range)
+        const text = selection.toString()
+        copy(text, this)
+        selection.removeAllRanges()
+        $buttonParent.removeClass('copy-true')
+      })
+    }
+  }
+}
 
-    //------- Niceselect  js --------//  
+/**
+ * PhotoFigcaption
+ */
+function addPhotoFigcaption () {
+  const images = $('#article-container img').not('.justified-gallery img')
+  images.each(function (i, o) {
+    const $this = $(o)
+    if ($this.attr('alt')) {
+      const t = $('<div class="img-alt is-center">' + $this.attr('alt') + '</div>')
+      $this.after(t)
+    }
+  })
+}
 
-    if (document.getElementById("default-select")) {
-        $('select').niceSelect();
-    };
-    if (document.getElementById("service-select")) {
-        $('select').niceSelect();
-    };
+/**
+ * justified-gallery 圖庫排版
+ */
 
-    //------- Pre Loader --------//  
-    $(window).on('load', function () {
-        $(".preloader-area").delay(200).fadeOut(500);
+let detectJgJsLoad = false
+const runJustifiedGallery = function () {
+  const $justifiedGallery = $('.justified-gallery')
+  if ($justifiedGallery.length) {
+    const $imgList = $justifiedGallery.find('img')
+    $imgList.unwrap()
+    if ($imgList.length) {
+      $imgList.each(function (i, o) {
+        if ($(o).attr('data-lazy-src')) $(o).attr('src', $(o).attr('data-lazy-src'))
+        $(o).wrap('<div></div>')
+      })
+    }
+
+    if (detectJgJsLoad) initJustifiedGallery($justifiedGallery)
+    else {
+      $('head').append(`<link rel="stylesheet" type="text/css" href="${GLOBAL_CONFIG.justifiedGallery.css}">`)
+      $.getScript(`${GLOBAL_CONFIG.justifiedGallery.js}`, function () {
+        initJustifiedGallery($justifiedGallery)
+      })
+      detectJgJsLoad = true
+    }
+  }
+}
+
+/**
+ * fancybox和 mediumZoom
+ */
+const addLightBox = function () {
+  const isMediumZoom = GLOBAL_CONFIG.medium_zoom
+  const isFancybox = GLOBAL_CONFIG.fancybox
+  if (isFancybox) {
+    const images = $('#article-container img:not(.gallery-group-img)').not($('a>img'))
+    images.each(function (i, o) {
+      const lazyloadSrc = $(o).attr('data-lazy-src') ? $(o).attr('data-lazy-src') : $(o).attr('src')
+      const dataCaption = $(o).attr('alt') ? $(o).attr('alt') : ''
+      $(o).wrap(`<a href="${lazyloadSrc}" data-fancybox="group" data-caption="${dataCaption}" class="fancybox"></a>`)
     })
 
-    //------- Lightbox  js --------//  
-    $('.img-gal').magnificPopup({
-        type: 'image',
-        gallery: {
-            enabled: true
+    $().fancybox({
+      selector: '[data-fancybox]',
+      loop: true,
+      transitionEffect: 'slide',
+      protect: true,
+      buttons: ['slideShow', 'fullScreen', 'thumbs', 'close'],
+      hash: false
+    })
+  } else if (isMediumZoom) {
+    const zoom = mediumZoom(document.querySelectorAll('#article-container :not(a)>img'))
+    zoom.on('open', function (event) {
+      const photoBg = $(document.documentElement).attr('data-theme') === 'dark' ? '#121212' : '#fff'
+      zoom.update({
+        background: photoBg
+      })
+    })
+  }
+}
+
+/**
+ * 滾動處理
+ */
+const scrollFn = function () {
+  let initTop = 0
+  let isChatShow = true
+  const $rightside = $('#rightside')
+  const $nav = $('#nav')
+  const isChatBtnHide = typeof chatBtnHide === 'function'
+  const isChatBtnShow = typeof chatBtnShow === 'function'
+  $(window).scroll(throttle(function (event) {
+    const currentTop = $(this).scrollTop()
+    const isDown = scrollDirection(currentTop)
+    if (currentTop > 56) {
+      if (isDown) {
+        if ($nav.hasClass('visible')) $nav.removeClass('visible')
+        if (isChatBtnShow && isChatShow === true) {
+          chatBtnHide()
+          isChatShow = false
         }
-    });
-
-
-    $('.play-btn').magnificPopup({
-        type: 'iframe',
-        mainClass: 'mfp-fade',
-        removalDelay: 160,
-        preloader: false,
-        fixedContentPos: false
-    });
-
-    //------- Filter  js --------//  
-    $(window).on("load", function () {
-        $('.filters ul li').on("click", function () {
-            $('.filters ul li').removeClass('active');
-            $(this).addClass('active');
-
-            var data = $(this).attr('data-filter');
-            $grid.isotope({
-                filter: data
-            })
-        });
-
-
-        if (document.getElementById("work")) {
-            var $grid = $(".grid").isotope({
-                itemSelector: ".all",
-                percentPosition: true,
-                masonry: {
-                    columnWidth: ".all"
-                }
-            })
-        };
-    });
-
-    //------- Accordion  js --------//  
-
-    jQuery(document).ready(function ($) {
-
-        if (document.getElementById("accordion")) {
-
-            var accordion_1 = new Accordion(document.getElementById("accordion"), {
-                collapsible: false,
-                slideDuration: 500
-            });
+      } else {
+        if (!$nav.hasClass('visible')) $nav.addClass('visible')
+        if (isChatBtnHide && isChatShow === false) {
+          window.chatBtnShow()
+          isChatShow = true
         }
-    });
+      }
+      $nav.addClass('fixed')
+      if ($rightside.css('opacity') === '0') {
+        $rightside.css({ opacity: '1', transform: 'translateX(-38px)' })
+      }
+    } else {
+      if (currentTop === 0) {
+        $nav.removeClass('fixed').removeClass('visible')
+      }
+      $rightside.css({ opacity: '', transform: '' })
+    }
+  }, 200))
 
-    //------- Circle Chart  js --------//  
+  // find the scroll direction
+  function scrollDirection (currentTop) {
+    const result = currentTop > initTop // true is down & false is up
+    initTop = currentTop
+    return result
+  }
+}
 
-    if (document.getElementById("skills")) {
+/**
+ *  toc
+ */
+const tocFn = function () {
+  $('.toc-child').hide()
 
-        $('.skill-1').percentcircle({
-            animate: true,
-            diameter: 400,
-            guage: 5,
-            coverBg: '#fff',
-            bgColor: '#efefef',
-            fillColor: '#988fff',
-            percentSize: '24px',
-            percentWeight: 'normal'
-        });
+  // main of scroll
+  $(window).scroll(throttle(function (event) {
+    const currentTop = $(this).scrollTop()
+    scrollPercent(currentTop)
+    findHeadPosition(currentTop)
+    autoScrollToc(currentTop)
+  }, 100))
 
-        $('.skill-2').percentcircle({
-            animate: true,
-            diameter: 400,
-            guage: 5,
-            coverBg: '#fff',
-            bgColor: '#efefef',
-            fillColor: '#988fff',
-            percentSize: '24px',
-            percentWeight: 'normal'
-        });
+  // expand toc-item
+  const expandToc = function ($item) {
+    if ($item.is(':visible')) {
+      return
+    }
+    $item.fadeIn(400)
+  }
 
-        $('.skill-3').percentcircle({
-            animate: true,
-            diameter: 400,
-            guage: 5,
-            coverBg: '#fff',
-            bgColor: '#efefef',
-            fillColor: '#988fff',
-            percentSize: '24px',
-            percentWeight: 'normal'
-        });
+  const scrollPercent = function (currentTop) {
+    const docHeight = $('#article-container').height()
+    const winHeight = $(window).height()
+    const contentMath = (docHeight > winHeight) ? (docHeight - winHeight) : ($(document).height() - winHeight)
+    const scrollPercent = (currentTop) / (contentMath)
+    const scrollPercentRounded = Math.round(scrollPercent * 100)
+    const percentage = (scrollPercentRounded > 100) ? 100
+      : (scrollPercentRounded <= 0) ? 0
+        : scrollPercentRounded
+    $('.progress-num').text(percentage)
+    $('.sidebar-toc__progress-bar').animate({
+      width: percentage + '%'
+    }, 100)
+  }
 
-        $('.skill-4').percentcircle({
-            animate: true,
-            diameter: 400,
-            guage: 5,
-            coverBg: '#fff',
-            bgColor: '#efefef',
-            fillColor: '#988fff',
-            percentSize: '24px',
-            percentWeight: 'normal'
-        });
+  // anchor
+  const isAnchor = GLOBAL_CONFIG.isanchor
+  const updateAnchor = function (anchor) {
+    if (window.history.replaceState && anchor !== window.location.hash) {
+      window.history.replaceState(undefined, undefined, anchor)
+    }
+  }
 
-    };
-
-    //------- Superfist nav menu  js --------//  
-
-    $('.nav-menu').superfish({
-        animation: {
-            opacity: 'show'
-        },
-        speed: 400
-    });
-
-    //------- Mobile Nav  js --------//  
-
-    if ($('#nav-menu-container').length) {
-        var $mobile_nav = $('#nav-menu-container').clone().prop({
-            id: 'mobile-nav'
-        });
-        $mobile_nav.find('> ul').attr({
-            'class': '',
-            'id': ''
-        });
-        $('body').append($mobile_nav);
-        $('body').prepend('<button type="button" id="mobile-nav-toggle"><i class="lnr lnr-menu"></i></button>');
-        $('body').append('<div id="mobile-body-overly"></div>');
-        $('#mobile-nav').find('.menu-has-children').prepend('<i class="lnr lnr-chevron-down"></i>');
-
-        $(document).on('click', '.menu-has-children i', function (e) {
-            $(this).next().toggleClass('menu-item-active');
-            $(this).nextAll('ul').eq(0).slideToggle();
-            $(this).toggleClass("lnr-chevron-up lnr-chevron-down");
-        });
-
-        $(document).on('click', '#mobile-nav-toggle', function (e) {
-            $('body').toggleClass('mobile-nav-active');
-            $('#mobile-nav-toggle i').toggleClass('lnr-cross lnr-menu');
-            $('#mobile-body-overly').toggle();
-        });
-
-        $(document).click(function (e) {
-            var container = $("#mobile-nav, #mobile-nav-toggle");
-            if (!container.is(e.target) && container.has(e.target).length === 0) {
-                if ($('body').hasClass('mobile-nav-active')) {
-                    $('body').removeClass('mobile-nav-active');
-                    $('#mobile-nav-toggle i').toggleClass('lnr-cross lnr-menu');
-                    $('#mobile-body-overly').fadeOut();
-                }
-            }
-        });
-    } else if ($("#mobile-nav, #mobile-nav-toggle").length) {
-        $("#mobile-nav, #mobile-nav-toggle").hide();
+  // find head position & add active class
+  // DOM Hierarchy:
+  // ol.toc > (li.toc-item, ...)
+  // li.toc-item > (a.toc-link, ol.toc-child > (li.toc-item, ...))
+  const findHeadPosition = function (top) {
+    // assume that we are not in the post page if no TOC link be found,
+    // thus no need to update the status
+    if ($('.toc-link').length === 0) {
+      return false
     }
 
-    //------- Smooth Scroll  js --------//  
+    const list = $('#article-container').find('h1,h2,h3,h4,h5,h6')
+    let currentId = ''
+    list.each(function () {
+      const head = $(this)
+      if (top > head.offset().top - 25) {
+        currentId = '#' + $(this).attr('id')
+      }
+    })
 
-    $('.nav-menu a, #mobile-nav a, .scrollto').on('click', function () {
-        if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-            var target = $(this.hash);
-            if (target.length) {
-                var top_space = 0;
-
-                if ($('#header').length) {
-                    top_space = $('#header').outerHeight();
-
-                    if (!$('#header').hasClass('header-fixed')) {
-                        top_space = top_space;
-                    }
-                }
-
-                $('html, body').animate({
-                    scrollTop: target.offset().top - top_space
-                }, 1500, 'easeInOutExpo');
-
-                if ($(this).parents('.nav-menu').length) {
-                    $('.nav-menu .menu-active').removeClass('menu-active');
-                    $(this).closest('li').addClass('menu-active');
-                }
-
-                if ($('body').hasClass('mobile-nav-active')) {
-                    $('body').removeClass('mobile-nav-active');
-                    $('#mobile-nav-toggle i').toggleClass('lnr-times lnr-bars');
-                    $('#mobile-body-overly').fadeOut();
-                }
-                return false;
-            }
-        }
-    });
-
-    $(document).ready(function () {
-
-        $('html, body').hide();
-
-        if (window.location.hash) {
-
-            setTimeout(function () {
-
-                $('html, body').scrollTop(0).show();
-
-                $('html, body').animate({
-
-                    scrollTop: $(window.location.hash).offset().top - 108
-
-                }, 1000)
-
-            }, 0);
-
-        } else {
-
-            $('html, body').show();
-
-        }
-
-    });
-
-    //------- Header Scroll Class  js --------//  
-
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 100) {
-            $('#header').addClass('header-scrolled');
-        } else {
-            $('#header').removeClass('header-scrolled');
-        }
-    });
-
-    //------- Owl Carusel  js --------//
-    if($('.active-brand-carusel').length) {
-        $('.active-brand-carusel').owlCarousel({
-            items: 5,
-            loop: true,
-            autoplayHoverPause: true,
-            autoplay: true,
-            responsive: {
-                0: {
-                    items: 1
-                },
-                768: {
-                    items: 3,
-                },
-                991: {
-                    items: 4,
-                },
-                1024: {
-                    items: 5,
-                }
-            }
-        });
+    if (currentId === '') {
+      $('.toc-link').removeClass('active')
+      $('.toc-child').hide()
     }
 
-    if ($('.testi_slider').length) {
-        $('.testi_slider').owlCarousel({
-            loop: true,
-            margin: 30,
-            items: 1,
-            nav: true,
-            autoplay: 2500,
-            smartSpeed: 1500,
-            dots: true,
-            responsiveClass: true,
-            navText : ["<i class='lnr lnr-arrow-left'></i>","<i class='lnr lnr-arrow-right'></i>"]
+    const currentActive = $('.toc-link.active')
+    if (currentId && currentActive.attr('href') !== currentId) {
+      if (isAnchor) updateAnchor(currentId)
+
+      $('.toc-link').removeClass('active')
+
+      const _this = $('.toc-link[href="' + currentId + '"]')
+      _this.addClass('active')
+
+      const parents = _this.parents('.toc-child')
+      // Returned list is in reverse order of the DOM elements
+      // Thus `parents.last()` is the outermost .toc-child container
+      // i.e. list of subsections
+      const topLink = (parents.length > 0) ? parents.last() : _this
+      expandToc(topLink.closest('.toc-item').find('.toc-child'))
+      topLink
+        // Find all top-level .toc-item containers, i.e. sections
+        // excluding the currently active one
+        .closest('.toc-item').siblings('.toc-item')
+        // Hide their respective list of subsections
+        .find('.toc-child').hide()
+    }
+  }
+
+  const autoScrollToc = function (currentTop) {
+    if ($('.toc-link').hasClass('active')) {
+      const activePosition = $('.active').offset().top
+      const sidebarScrollTop = $('#sidebar .sidebar-toc__content').scrollTop()
+      if (activePosition > (currentTop + $(window).height() - 100)) {
+        $('#sidebar .sidebar-toc__content').scrollTop(sidebarScrollTop + 100)
+      }
+      if (activePosition < currentTop + 100) {
+        $('#sidebar .sidebar-toc__content').scrollTop(sidebarScrollTop - 100)
+      }
+    }
+  }
+}
+
+/**
+ * Rightside
+ */
+
+const $rightsideEle = $('#rightside')
+
+// read-mode
+$rightsideEle.on('click', '#readmode', function () {
+  $('body').toggleClass('read-mode')
+})
+
+// font change
+const originFontSize = $('body').css('font-size')
+$rightsideEle.on('click', '#font_plus', () => {
+  const nowFontSize = parseFloat($('body').css('font-size'))
+  if (nowFontSize < 20) {
+    $('body').css('font-size', nowFontSize + 1)
+  }
+})
+
+$rightsideEle.on('click', '#font_minus', () => {
+  const nowFontSize = parseFloat($('body').css('font-size'))
+  if (nowFontSize > 10) {
+    $('body').css('font-size', nowFontSize - 1)
+  }
+})
+
+// Switch Between Light And Dark Mode
+if ($('#darkmode').length) {
+  const switchReadMode = function () {
+    const nowMode = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
+    if (nowMode === 'light') {
+      activateDarkMode()
+      Cookies.set('theme', 'dark', 2)
+      GLOBAL_CONFIG.Snackbar !== undefined && snackbarShow(GLOBAL_CONFIG.Snackbar.day_to_night)
+    } else {
+      activateLightMode()
+      Cookies.set('theme', 'light', 2)
+      GLOBAL_CONFIG.Snackbar !== undefined && snackbarShow(GLOBAL_CONFIG.Snackbar.night_to_day)
+    }
+  }
+
+  $rightsideEle.on('click', '#darkmode', () => {
+    switchReadMode()
+    typeof utterancesTheme === 'function' && utterancesTheme()
+    typeof FB === 'object' && window.loadFBComment()
+    window.DISQUS && $('#disqus_thread').children().length && setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+// rightside 點擊設置 按鈕 展開
+$rightsideEle.on('click', '#rightside_config', () => $('#rightside-config-hide').toggleClass('show'))
+
+// Back to top
+$rightsideEle.on('click', '#go-up', () => scrollToDest('body'))
+
+/**
+ * menu
+ * 側邊欄sub-menu 展開/收縮
+ * 解決menus在觸摸屏下，滑動屏幕menus_item_child不消失的問題（手機hover的bug)
+ */
+const clickFnOfSubMenu = function () {
+  $('#mobile-sidebar-menus .expand').on('click', function () {
+    $(this).parents('.menus_item').find('> .menus_item_child').slideToggle()
+    $(this).toggleClass('closed')
+  })
+
+  $(window).on('touchmove', function (e) {
+    const $menusChild = $('#nav .menus_item_child')
+    if ($menusChild.is(':visible')) {
+      $menusChild.css('display', 'none')
+    }
+  })
+}
+
+/**
+ * 複製時加上版權信息
+ */
+const addCopyright = function () {
+  const copyright = GLOBAL_CONFIG.copyright
+  document.body.oncopy = function (event) {
+    event.preventDefault()
+    let textFont; const copyFont = window.getSelection(0).toString()
+    if (copyFont.length > copyright.limitCount) {
+      textFont = copyFont + '\n' + '\n' + '\n' +
+        copyright.languages.author + '\n' +
+        copyright.languages.link + window.location.href + '\n' +
+        copyright.languages.source + '\n' +
+        copyright.languages.info
+    } else {
+      textFont = copyFont
+    }
+    if (event.clipboardData) {
+      return event.clipboardData.setData('text', textFont)
+    } else {
+      // 兼容IE
+      return window.clipboardData.setData('text', textFont)
+    }
+  }
+}
+
+/**
+ * 網頁運行時間
+ */
+const addRuntime = function () {
+  const $runtimeCount = $('#webinfo-runtime-count')
+  if ($runtimeCount.length) {
+    const publishDate = $runtimeCount.attr('publish_date')
+    $runtimeCount.text(diffDate(publishDate) + ' ' + GLOBAL_CONFIG.runtime_unit)
+  }
+}
+
+/**
+ * table overflow
+ */
+const addTableWrap = function () {
+  const $table = $('#article-container table').not($('figure.highlight > table'))
+  $table.each(function () {
+    $(this).wrap('<div class="table-wrap"></div>')
+  })
+}
+
+/**
+ * 百度推送
+ */
+
+const pushToBaidu = () => {
+  const bp = document.createElement('script')
+  const curProtocol = window.location.protocol.split(':')[0]
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js'
+  } else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js'
+  }
+  bp.dataset.pjax = ''
+  const s = document.getElementsByTagName('script')[0]
+  s.parentNode.insertBefore(bp, s)
+}
+
+/**
+ * tag-hide
+ */
+
+const clickFnOfTagHide = function () {
+  const $hideInline = $('.hide-button')
+  if ($hideInline.length) {
+    $hideInline.on('click', function (e) {
+      const $this = $(this)
+      const $hideContent = $(this).next('.hide-content')
+      $this.toggleClass('open')
+      $hideContent.toggle()
+      if ($this.hasClass('open')) {
+        if ($hideContent.find('.justified-gallery').length > 0) {
+          initJustifiedGallery($hideContent.find('.justified-gallery'))
+        }
+      }
+    })
+  }
+}
+
+const clickFnOfTabs = function () {
+  const $tab = $('#article-container .tabs')
+  $tab.find('.tab > button').on('click', function (e) {
+    const $this = $(this)
+    const $tabItem = $this.parent()
+
+    if (!$tabItem.hasClass('active')) {
+      const $tabContent = $this.parents('.nav-tabs').next()
+      $tabItem.siblings('.active').removeClass('active')
+      $tabItem.addClass('active')
+      const tabId = $this.attr('data-href')
+      $tabContent.find('> .tab-item-content').removeClass('active')
+      $tabContent.find(`> ${tabId}`).addClass('active')
+      const $isTabJustifiedGallery = $tabContent.find(tabId).find('.justified-gallery')
+      if ($isTabJustifiedGallery.length > 0) {
+        initJustifiedGallery($isTabJustifiedGallery)
+      }
+    }
+  })
+}
+
+const toggleCardCategory = function () {
+  const $cardCategory = $('.card-category-list-item.parent i')
+  $cardCategory.on('click', function (e) {
+    e.preventDefault()
+    const $this = $(this)
+    $this.toggleClass('expand')
+    $this.parents('.parent').next().toggle()
+  })
+}
+
+const switchComments = function () {
+  let switchDone = false
+  $('#switch-comments-btn').on('click', function () {
+    $('#post-comment > .comment-wrap > div').each(function () {
+      if ($(this).is(':visible')) {
+        $(this).hide()
+      } else {
+        $(this).css({
+          display: 'block',
+          animation: 'tabshow .5s'
         })
+      }
+    })
+    if (!switchDone && typeof loadOtherComment === 'function') {
+      switchDone = true
+      loadOtherComment()
     }
+  })
+}
 
-    //------- Timer Countdown  js --------//  
-
-    if (document.getElementById("count")) {
-
-        var countDownDate = new Date("Sep 5, 2018 15:37:25").getTime();
-
-        // Update the count down every 1 second
-        var x = setInterval(function () {
-
-            // Get todays date and time
-            var now = new Date().getTime();
-
-            // Find the distance between now an the count down date
-            var distance = countDownDate - now;
-
-            // Time calculations for days, hours, minutes and seconds
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Display the result in the element with id="count"
-            document.getElementById("count").innerHTML =
-
-                "<div class='col'><span>" + days + "</span><br> Days " + "</div>" + "<div class='col'><span>" + hours + "</span><br> Hours " + "</div>" + "<div class='col'><span>" + minutes + "</span><br> Minutes " + "</div>" + "<div class='col'><span>" + seconds + "</span><br> Seconds </div>";
-
-            // If the count down is finished, write some text
-            if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("count").innerHTML = "EXPIRED";
-            }
-        }, 1000);
-
+const addPostOutdateNotice = function () {
+  const data = GLOBAL_CONFIG.noticeOutdate
+  var diffDay = diffDate(GLOBAL_CONFIG_SITE.postUpdate)
+  if (diffDay >= data.limitDay) {
+    const code = `<div class="post-outdate-notice">${data.messagePrev + ' ' + diffDay + ' ' + data.messageNext}</div>`
+    if (data.position === 'top') {
+      $('#article-container').prepend(code)
+    } else {
+      $('#article-container').append(code)
     }
+  }
+}
 
-    //------- Google Map  js --------//  
+/**
+ * lazyload
+ */
 
-    if (document.getElementById("map")) {
-        google.maps.event.addDomListener(window, 'load', init);
+if (GLOBAL_CONFIG.islazyload) {
+  window.lazyLoadOptions = {
+    elements_selector: 'img',
+    threshold: 0,
+    data_src: 'lazy-src'
+  }
+  window.addEventListener(
+    'LazyLoad::Initialized',
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance
+    },
+    false
+  )
+}
 
-        function init() {
-            var mapOptions = {
-                zoom: 11,
-                center: new google.maps.LatLng(40.6700, -73.9400), // New York
-                styles: [{
-                    "featureType": "water",
-                    "elementType": "geometry",
-                    "stylers": [{
-                        "color": "#e9e9e9"
-                    }, {
-                        "lightness": 17
-                    }]
-                }, {
-                    "featureType": "landscape",
-                    "elementType": "geometry",
-                    "stylers": [{
-                        "color": "#f5f5f5"
-                    }, {
-                        "lightness": 20
-                    }]
-                }, {
-                    "featureType": "road.highway",
-                    "elementType": "geometry.fill",
-                    "stylers": [{
-                        "color": "#ffffff"
-                    }, {
-                        "lightness": 17
-                    }]
-                }, {
-                    "featureType": "road.highway",
-                    "elementType": "geometry.stroke",
-                    "stylers": [{
-                        "color": "#ffffff"
-                    }, {
-                        "lightness": 29
-                    }, {
-                        "weight": 0.2
-                    }]
-                }, {
-                    "featureType": "road.arterial",
-                    "elementType": "geometry",
-                    "stylers": [{
-                        "color": "#ffffff"
-                    }, {
-                        "lightness": 18
-                    }]
-                }, {
-                    "featureType": "road.local",
-                    "elementType": "geometry",
-                    "stylers": [{
-                        "color": "#ffffff"
-                    }, {
-                        "lightness": 16
-                    }]
-                }, {
-                    "featureType": "poi",
-                    "elementType": "geometry",
-                    "stylers": [{
-                        "color": "#f5f5f5"
-                    }, {
-                        "lightness": 21
-                    }]
-                }, {
-                    "featureType": "poi.park",
-                    "elementType": "geometry",
-                    "stylers": [{
-                        "color": "#dedede"
-                    }, {
-                        "lightness": 21
-                    }]
-                }, {
-                    "elementType": "labels.text.stroke",
-                    "stylers": [{
-                        "visibility": "on"
-                    }, {
-                        "color": "#ffffff"
-                    }, {
-                        "lightness": 16
-                    }]
-                }, {
-                    "elementType": "labels.text.fill",
-                    "stylers": [{
-                        "saturation": 36
-                    }, {
-                        "color": "#333333"
-                    }, {
-                        "lightness": 40
-                    }]
-                }, {
-                    "elementType": "labels.icon",
-                    "stylers": [{
-                        "visibility": "off"
-                    }]
-                }, {
-                    "featureType": "transit",
-                    "elementType": "geometry",
-                    "stylers": [{
-                        "color": "#f2f2f2"
-                    }, {
-                        "lightness": 19
-                    }]
-                }, {
-                    "featureType": "administrative",
-                    "elementType": "geometry.fill",
-                    "stylers": [{
-                        "color": "#fefefe"
-                    }, {
-                        "lightness": 20
-                    }]
-                }, {
-                    "featureType": "administrative",
-                    "elementType": "geometry.stroke",
-                    "stylers": [{
-                        "color": "#fefefe"
-                    }, {
-                        "lightness": 17
-                    }, {
-                        "weight": 1.2
-                    }]
-                }]
-            };
-            var mapElement = document.getElementById('map');
-            var map = new google.maps.Map(mapElement, mapOptions);
-            var marker = new google.maps.Marker({
-                position: new google.maps.LatLng(40.6700, -73.9400),
-                map: map,
-                title: 'Snazzy!'
-            });
-        }
-    }
+const unRefreshFn = function () {
+  $(window).on('resize', function () {
+    if (window.innerWidth < 768) adjustMenu(0)
+    else if ($('#sidebar').hasClass('tocOpenPc') && $('#nav').hasClass('fixed')) adjustMenu(1)
+    else adjustMenu(2)
+  })
 
-    //------- Mailchimp js --------//  
+  clickFnOfSubMenu()
+  GLOBAL_CONFIG.copyright !== undefined && addCopyright()
+  GLOBAL_CONFIG.baiduPush && pushToBaidu()
+}
 
-    // $(document).ready(function () {
-    //     $('#mc_embed_signup').find('form').ajaxChimp();
-    // });
+const refreshFn = function () {
+  initAdjust()
 
-});
+  if (GLOBAL_CONFIG_SITE.isPost) {
+    OpenSidebarAuto()
+    toggleSidebar()
+    GLOBAL_CONFIG_SITE.isSidebar && tocFn()
+    GLOBAL_CONFIG.noticeOutdate !== undefined && addPostOutdateNotice()
+  }
+
+  sidebarFn()
+  GLOBAL_CONFIG_SITE.isHome && scrollDownInIndex()
+  addHighlightTool()
+  GLOBAL_CONFIG.isPhotoFigcaption && addPhotoFigcaption()
+  runJustifiedGallery()
+  addLightBox()
+  scrollFn()
+  GLOBAL_CONFIG.runtime && addRuntime()
+  addTableWrap()
+  clickFnOfTagHide()
+  clickFnOfTabs()
+  toggleCardCategory()
+  switchComments()
+}
+
+$(function () {
+  refreshFn()
+  unRefreshFn()
+})
