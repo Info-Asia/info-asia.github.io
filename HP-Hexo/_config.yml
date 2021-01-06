@@ -3,12 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 孙树斌的个人主页
+title: 个人主页(中国)
 subtitle: '移动互联网·人工智能·人力资源'
 description: '诚信、睿智、勤奋、创新'
-keywords:
+keywords: 个人主页,人工智能,辅助决策,在线教育
 author: Shubin Sun
-email: sunshubin@outlook.it
+email: sunshubin@outlook.in
 company:  <a href="https://sb-hitech.github.io/about" title="SB-HiTech Co., Ltd"  target="_blank">SB-HiTech Co., Ltd</a> 
 policy:  <a href="https://sb-hitech.github.io/policy" title="权责声明"  target="_blank">权责声明</a> 
 language:
